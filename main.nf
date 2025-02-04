@@ -1,28 +1,36 @@
-nextflow.enable.dsl=2
+#!/usr/bin/env nextflow
 
-process hello {
-    output:
-        path "hello.txt"
-    
-    script:
-    """
-    echo "Hello, World!" > hello.txt
-    """
-}
+params.greeting = 'Hello world!' 
+greeting_ch = Channel.of(params.greeting) 
 
-process count_lines {
-    input:
-        path input_file
-    output:
-        stdout
-    
-    script:
-    """
-    wc -l < \$input_file
-    """
-}
+process SPLITLETTERS { 
+    input: 
+    val x 
 
-workflow {
-    hello()
-    count_lines(hello.out)
+    output: 
+    path 'chunk_*' 
+
+    script: 
+    """
+    printf '$x' | split -b 6 - chunk_
+    """
+} 
+
+process CONVERTTOUPPER { 
+    input: 
+    path y 
+
+    output: 
+    stdout 
+
+    script: 
+    """
+    cat $y | tr '[a-z]' '[A-Z]'
+    """
+} 
+
+workflow { 
+    letters_ch = SPLITLETTERS(greeting_ch) 
+    results_ch = CONVERTTOUPPER(letters_ch.flatten()) 
+    results_ch.view { it } 
 }
