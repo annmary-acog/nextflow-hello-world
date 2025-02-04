@@ -4,6 +4,9 @@ params.greeting = 'Hello world!'
 greeting_ch = Channel.of(params.greeting) 
 
 process SPLITLETTERS { 
+    container 'ubuntu'
+    publishDir '.', mode: "copy"
+
     input: 
     val x 
 
@@ -17,6 +20,10 @@ process SPLITLETTERS {
 } 
 
 process CONVERTTOUPPER { 
+    container 'ubuntu'
+    stageInMode 'copy'
+    publishDir '.', mode: "copy"
+
     input: 
     path y 
 
