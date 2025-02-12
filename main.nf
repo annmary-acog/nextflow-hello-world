@@ -227,8 +227,8 @@ user_name = workflow.userName
 if (user_name == "ubuntu" || user_name == "ec2-user") {
     workflow.onComplete {
         def trace_timestamp = new java.util.Date().format('yyyy-MM-dd_HH-mm-ss')
-        trace_report = file("/home/${user_name}/nf-out/trace.txt")
-        trace_report.copyTo("results/pipeline_info/execution_trace_${trace_timestamp}.txt")
+//        trace_report = file("/home/${user_name}/nf-out/trace.txt")
+//        trace_report.copyTo("results/pipeline_info/execution_trace_${trace_timestamp}.txt")
     }
 }
 
